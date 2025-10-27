@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   {
     path: 'inicio',
-    loadComponent: () => import('./component/inicio/inicio').then((c) => c.Inicio),
+    loadComponent: () => import('./components/inicio/inicio').then((c) => c.Inicio),
   },
 ];
 
