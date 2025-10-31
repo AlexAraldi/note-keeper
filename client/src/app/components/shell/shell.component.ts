@@ -8,7 +8,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { M } from '@angular/cdk/keycodes';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -40,6 +39,5 @@ export class ShellComponent {
     { titulo: 'Início', icone: 'home', link: '/inicio' },
     { titulo: 'Categorias', icone: 'label', link: '/categorias' },
     { titulo: 'Notas', icone: 'collections_bookmark', link: '/notas' },
-    { titulo: 'Teste', icone: 'edit_document', link: '/teste' },
   ];
 }
