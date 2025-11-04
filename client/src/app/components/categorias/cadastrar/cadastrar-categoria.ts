@@ -1,0 +1,56 @@
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Router, RouterLink } from '@angular/router';
+import { CategoriaService } from '../categoria.service';
+import { CadastrarCategoriaModel } from '../categoria.models';
+import { finalize } from 'rxjs';
+
+@Component({
+  selector: 'app-cadastrar-categoria',
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    RouterLink,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './cadastrar-categoria.html',
+})
+export class CadastrarCategoria {
+  protected readonly formBuilder = inject(FormBuilder);
+  protected readonly categoriaService = inject(CategoriaService);
+  protected readonly router = inject(Router);
+
+  protected categoriaForm: FormGroup = this.formBuilder.group({
+    titulo: ['', [Validators.required, Validators.minLength(3)]],
+  });
+
+  get titulo() {
+    return this.categoriaForm.get('titulo');
+  }
+
+  public cadastrar() {
+    if (this.categoriaForm.invalid) return;
+
+    const categoriaModel: CadastrarCategoriaModel = this.categoriaForm
+      .value as CadastrarCategoriaModel;
+
+    this.categoriaService
+      .cadastrar(categoriaModel)
+      .pipe(finalize(() => this.router.navigate(['/categorias'])))
+      .subscribe((res) => console.log(res));
+  }
+}
