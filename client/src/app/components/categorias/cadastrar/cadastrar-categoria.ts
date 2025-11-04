@@ -13,8 +13,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { CategoriaService } from '../categoria.service';
-import { CadastrarCategoriaModel } from '../categoria.models';
-import { finalize } from 'rxjs';
+import { CadastrarCategoriaModel, CadastrarCategoriaResponseModel } from '../categoria.models';
+import { finalize, Observer, PartialObserver } from 'rxjs';
+import { observeNotification } from 'rxjs/internal/Notification';
 
 @Component({
   selector: 'app-cadastrar-categoria',
@@ -45,12 +46,14 @@ export class CadastrarCategoria {
   public cadastrar() {
     if (this.categoriaForm.invalid) return;
 
-    const categoriaModel: CadastrarCategoriaModel = this.categoriaForm
-      .value as CadastrarCategoriaModel;
+    const categoriaModel: CadastrarCategoriaModel = this.categoriaForm.value;
 
-    this.categoriaService
-      .cadastrar(categoriaModel)
-      .pipe(finalize(() => this.router.navigate(['/categorias'])))
-      .subscribe((res) => console.log(res));
+    const cadastroObservable: Observer<CadastrarCategoriaResponseModel> = {
+      next: (res) => console.log(res),
+      error: (err) => console.error('Aconteceu um erro na observable', err),
+      complete: () => this.router.navigate(['/categorias']),
+    };
+
+    this.categoriaService.cadastrar(categoriaModel).subscribe(cadastroObservable);
   }
 }
