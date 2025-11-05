@@ -15,6 +15,30 @@ html {
       density: 0,
     )
   );
+  .notificacao-sucesso {
+    @include mat.snack-bar-overrides(
+      (
+        button-color: var(--mat-sys-surface),
+        container-color: var(--mat-sys-primary),
+      )
+    );
+  }
+  .notificacao-erro {
+    @include mat.snack-bar-overrides(
+      (
+        button-color: var(--mat-sys-surface),
+        container-color: var(--mat-sys-error),
+      )
+    );
+  }
+  .notificacao-aviso {
+    @include mat.snack-bar-overrides(
+      (
+        button-color: var(--mat-sys-surface),
+        container-color: var(--mat-sys-secondary),
+      )
+    );
+  }
 }
 
 body {

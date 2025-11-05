@@ -1,11 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,8 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { CategoriaService } from '../categoria.service';
 import { CadastrarCategoriaModel, CadastrarCategoriaResponseModel } from '../categoria.models';
-import { finalize, Observer, PartialObserver } from 'rxjs';
-import { observeNotification } from 'rxjs/internal/Notification';
+import { Observer } from 'rxjs';
+import { NotificacaoService } from '../../shared/notificacao/notificacao.service';
 
 @Component({
   selector: 'app-cadastrar-categoria',
@@ -34,7 +28,7 @@ export class CadastrarCategoria {
   protected readonly formBuilder = inject(FormBuilder);
   protected readonly categoriaService = inject(CategoriaService);
   protected readonly router = inject(Router);
-
+  protected readonly notificacaoService = inject(NotificacaoService);
   protected categoriaForm: FormGroup = this.formBuilder.group({
     titulo: ['', [Validators.required, Validators.minLength(3)]],
   });
@@ -49,8 +43,11 @@ export class CadastrarCategoria {
     const categoriaModel: CadastrarCategoriaModel = this.categoriaForm.value;
 
     const cadastroObservable: Observer<CadastrarCategoriaResponseModel> = {
-      next: (res) => console.log(res),
-      error: (err) => console.error('Aconteceu um erro na observable', err),
+      next: () =>
+        this.notificacaoService.sucesso(
+          `O registro "${categoriaModel.titulo}" foi cadastrado com sucesso!`
+        ),
+      error: (err) => this.notificacaoService.erro(err.message),
       complete: () => this.router.navigate(['/categorias']),
     };
 
